@@ -9,21 +9,6 @@ const Header = () => {
 	);
 };
 
-// Allow keyboard input
-document.addEventListener('keydown', function(event) {
-    const key = event.key;
-
-    if (key >= '0' && key <= '9') {
-        appendToDisplay(key);
-    } else if (key === '+' || key === '-' || key === '*' || key === '/') {
-        appendToDisplay(key);
-    } else if (key === 'Enter') {
-        calculateResult();
-    } else if (key === 'Escape') {
-        clearDisplay();
-    }
-});
-
 const Calculator = () => {
 	const [input, setInput] = useState("");
 	const [result, setResult] = useState("");
@@ -49,10 +34,77 @@ const Calculator = () => {
 			setResult('Invalid Expression');
 			setInput('')
 		}
-		
-		
+
+	const [display, setDisplay] = useState('');
+
+  	const appendToDisplay = (value) => {
+    		setDisplay((prevDisplay) => prevDisplay + value);
+  	};
+
+  	const clearDisplay = () => {
+		etDisplay('');
+ 	};
+
+  	const calculateResult = () => {
+    	try {
+      		setDisplay(eval(display).toString());
+    	} catch (error) {
+      		setDisplay('Error');
+    	}	
 	};
+
+	useEffect(() => {
+    const handleKeyDown = (event) => {
+      const key = event.key;
+
+      if (key >= '0' && key <= '9') {
+        appendToDisplay(key);
+      } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+        appendToDisplay(key);
+      } else if (key === 'Enter') {
+        calculateResult();
+      } else if (key === 'Escape') {
+        clearDisplay();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [display]);
+
+		
 	return (
+		<div className="calculator">
+      <input type="text" value={display} readOnly />
+      <div>
+        <button onClick={() => appendToDisplay('1')}>1</button>
+        <button onClick={() => appendToDisplay('2')}>2</button>
+        <button onClick={() => appendToDisplay('3')}>3</button>
+        <button onClick={() => appendToDisplay('+')}>+</button>
+      </div>
+      <div>
+        <button onClick={() => appendToDisplay('4')}>4</button>
+        <button onClick={() => appendToDisplay('5')}>5</button>
+        <button onClick={() => appendToDisplay('6')}>6</button>
+        <button onClick={() => appendToDisplay('-')}>-</button>
+      </div>
+      <div>
+        <button onClick={() => appendToDisplay('7')}>7</button>
+        <button onClick={() => appendToDisplay('8')}>8</button>
+        <button onClick={() => appendToDisplay('9')}>9</button>
+        <button onClick={() => appendToDisplay('*')}>*</button>
+      </div>
+      <div>
+        <button onClick={() => appendToDisplay('0')}>0</button>
+        <button onClick={clearDisplay}>C</button>
+        <button onClick={calculateResult}>=</button>
+        <button onClick={() => appendToDisplay('/')}>/</button>
+      </div>
+    </div>
+  );
 		<div className="flex flex-col  justify-center items-center w-[360px] m-auto p-4 ">
 			<input
 				className=" border-2 border-black h-14 w-full text-right text-2xl p-4 bg-black  text-white opacity-85"
