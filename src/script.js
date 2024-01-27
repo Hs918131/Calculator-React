@@ -8,6 +8,22 @@ const Header = () => {
 		</div>
 	);
 };
+
+// Allow keyboard input
+document.addEventListener('keydown', function(event) {
+    const key = event.key;
+
+    if (key >= '0' && key <= '9') {
+        appendToDisplay(key);
+    } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+        appendToDisplay(key);
+    } else if (key === 'Enter') {
+        calculateResult();
+    } else if (key === 'Escape') {
+        clearDisplay();
+    }
+});
+
 const Calculator = () => {
 	const [input, setInput] = useState("");
 	const [result, setResult] = useState("");
@@ -33,6 +49,8 @@ const Calculator = () => {
 			setResult('Invalid Expression');
 			setInput('')
 		}
+		
+		
 	};
 	return (
 		<div className="flex flex-col  justify-center items-center w-[360px] m-auto p-4 ">
@@ -174,22 +192,6 @@ const Calculator = () => {
 		</div>
 	);
 };
-
-// Allow keyboard input
-document.addEventListener('keydown', function(event) {
-    const key = event.key;
-
-    if (key >= '0' && key <= '9') {
-        appendToDisplay(key);
-    } else if (key === '+' || key === '-' || key === '*' || key === '/') {
-        appendToDisplay(key);
-    } else if (key === 'Enter') {
-        calculateResult();
-    } else if (key === 'Escape') {
-        clearDisplay();
-    }
-});
-
 
 const AppLayout = () => {
 	return (
